@@ -7,8 +7,9 @@
 """
 Prosthetic Env Environment Implementation.
 
-A simple test environment that echoes back messages sent to it.
-Perfect for testing HTTP server infrastructure.
+A custom Reinforcement Learning environment for the AI-Powered 
+Prosthetic Management System (APMS). Trains an agent across 
+3 distinct grip calibration tasks.
 """
 
 from uuid import uuid4
@@ -24,39 +25,45 @@ except ImportError:
 
 class ProstheticEnvironment(Environment):
     """
-    A simple echo environment that echoes back messages.
-
-    This environment is designed for testing the HTTP server infrastructure.
-    It maintains minimal state and simply echoes back whatever message it receives.
-
-    Example:
-        >>> env = ProstheticEnvironment()
-        >>> obs = env.reset()
-        >>> print(obs.echoed_message)  # "Prosthetic Env environment ready!"
-        >>>
-        >>> obs = env.step(ProstheticAction(message="Hello"))
-        >>> print(obs.echoed_message)  # "Hello"
-        >>> print(obs.message_length)  # 5
+    Prosthetic Grip Calibration Environment.
+    
+    Tasks:
+    1. Precision Grip: Match a specific mid-level force.
+    2. Power Grip: Apply maximum force (>= 9).
+    3. Relaxation: Release all force (<= 1).
     """
 
     # Enable concurrent WebSocket sessions.
-    # Set to True if your environment isolates state between instances.
-    # When True, multiple WebSocket clients can connect simultaneously, each
-    # getting their own environment instance (when using factory mode in app.py).
     SUPPORTS_CONCURRENT_SESSIONS: bool = True
+    
     def __init__(self):
         self._state = State(episode_id=str(uuid4()), step_count=0)
         self.current_grip = 0
         self.target_grip = 5
         self.steps = 0
         self.max_steps = 15
+        self.task_type = 1
 
     def reset(self):
         import random
         self._state = State(episode_id=str(uuid4()), step_count=0)
-        self.current_grip = 0
-        self.target_grip = random.randint(2, 8) 
         self.steps = 0
+        
+        # Randomly assign one of the 3 distinct tasks
+        self.task_type = random.choice([1, 2, 3])
+        
+        if self.task_type == 1:
+            # Task 1: Precision Grip (match a specific mid-level force)
+            self.current_grip = 0
+            self.target_grip = random.randint(3, 7)
+        elif self.task_type == 2:
+            # Task 2: Maximum Power Grip
+            self.current_grip = 0
+            self.target_grip = 10
+        else:
+            # Task 3: Relaxation (Start tense, release to 0)
+            self.current_grip = 10
+            self.target_grip = 0
         
         return ProstheticObservation(
             current_grip=self.current_grip,
@@ -73,14 +80,25 @@ class ProstheticEnvironment(Environment):
         self.current_grip = max(0, min(10, self.current_grip))
         
         done = False
+        reward = -1.0  # Battery/time penalty for taking a step
         
-        if self.current_grip == self.target_grip:
-            reward = 10.0
-            done = True
-        else:
-            reward = -1.0 
-            if self.steps >= self.max_steps:
+        # Grading logic based on the 3 tasks
+        if self.task_type == 1:
+            if self.current_grip == self.target_grip:
+                reward = 10.0
                 done = True
+        elif self.task_type == 2:
+            if self.current_grip >= 9: # Close enough to max power
+                reward = 10.0
+                done = True
+        elif self.task_type == 3:
+            if self.current_grip <= 1: # Successfully relaxed
+                reward = 10.0
+                done = True
+                
+        # Stop if we hit the step limit
+        if self.steps >= self.max_steps:
+            done = True
 
         return ProstheticObservation(
             current_grip=self.current_grip,
@@ -88,6 +106,7 @@ class ProstheticEnvironment(Environment):
             done=done,
             reward=reward
         )
+        
     @property
     def state(self) -> State:
         """
