@@ -90,28 +90,28 @@ class ProstheticEnvironment(Environment):
         self.current_grip = max(0, min(10, self.current_grip))
         
         done = False
-        reward = -1.0  # Battery/time penalty for taking a step
+        reward = 0.0  # Normalized to fit 0.0-1.0 range
         
         # Grading logic based on the 5 tasks
         if self.task_type == 1:
             if self.current_grip == self.target_grip:
-                reward = 10.0
+                reward = 1.0
                 done = True
         elif self.task_type == 2:
             if self.current_grip >= 9: 
-                reward = 10.0
+                reward = 1.0
                 done = True
         elif self.task_type == 3:
             if self.current_grip <= 1: 
-                reward = 10.0
+                reward = 1.0
                 done = True
         elif self.task_type == 4:
             if self.current_grip == self.target_grip:
-                reward = 10.0
+                reward = 1.0
                 done = True
         elif self.task_type == 5:
             if self.current_grip == self.target_grip:
-                reward = 10.0
+                reward = 1.0
                 done = True
                 
         # Stop if we hit the step limit
