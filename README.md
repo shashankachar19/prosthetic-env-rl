@@ -1,3 +1,13 @@
+---
+title: Prosthetic Env RL
+emoji: 🦾
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # APMS: AI-Powered Prosthetic Management System
 
 [![OpenEnv Compliant](https://img.shields.io/badge/OpenEnv-Compliant-brightgreen.svg)]()
