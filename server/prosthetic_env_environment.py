@@ -9,7 +9,7 @@ Prosthetic Env Environment Implementation.
 
 A custom Reinforcement Learning environment for the AI-Powered 
 Prosthetic Management System (APMS). Trains an agent across 
-3 distinct grip calibration tasks.
+5 distinct grip calibration tasks.
 """
 
 from uuid import uuid4
@@ -28,9 +28,11 @@ class ProstheticEnvironment(Environment):
     Prosthetic Grip Calibration Environment.
     
     Tasks:
-    1. Precision Grip: Match a specific mid-level force.
+    1. Precision Grip: Match a specific mid-level force (3-7).
     2. Power Grip: Apply maximum force (>= 9).
     3. Relaxation: Release all force (<= 1).
+    4. Delicate Pinch: Match light force exactly (2).
+    5. Firm Handshake: Match strong, non-max force exactly (8).
     """
 
     # Enable concurrent WebSocket sessions.
@@ -49,21 +51,29 @@ class ProstheticEnvironment(Environment):
         self._state = State(episode_id=str(uuid4()), step_count=0)
         self.steps = 0
         
-        # Randomly assign one of the 3 distinct tasks
-        self.task_type = random.choice([1, 2, 3])
+        # Randomly assign one of the 5 distinct tasks
+        self.task_type = random.choice([1, 2, 3, 4, 5])
         
         if self.task_type == 1:
-            # Task 1: Precision Grip (match a specific mid-level force)
+            # Task 1: Precision Grip
             self.current_grip = 0
             self.target_grip = random.randint(3, 7)
         elif self.task_type == 2:
             # Task 2: Maximum Power Grip
             self.current_grip = 0
             self.target_grip = 10
-        else:
+        elif self.task_type == 3:
             # Task 3: Relaxation (Start tense, release to 0)
             self.current_grip = 10
             self.target_grip = 0
+        elif self.task_type == 4:
+            # Task 4: Delicate Pinch
+            self.current_grip = 0
+            self.target_grip = 2
+        else:
+            # Task 5: Firm Handshake
+            self.current_grip = 0
+            self.target_grip = 8
         
         return ProstheticObservation(
             current_grip=self.current_grip,
@@ -82,17 +92,25 @@ class ProstheticEnvironment(Environment):
         done = False
         reward = -1.0  # Battery/time penalty for taking a step
         
-        # Grading logic based on the 3 tasks
+        # Grading logic based on the 5 tasks
         if self.task_type == 1:
             if self.current_grip == self.target_grip:
                 reward = 10.0
                 done = True
         elif self.task_type == 2:
-            if self.current_grip >= 9: # Close enough to max power
+            if self.current_grip >= 9: 
                 reward = 10.0
                 done = True
         elif self.task_type == 3:
-            if self.current_grip <= 1: # Successfully relaxed
+            if self.current_grip <= 1: 
+                reward = 10.0
+                done = True
+        elif self.task_type == 4:
+            if self.current_grip == self.target_grip:
+                reward = 10.0
+                done = True
+        elif self.task_type == 5:
+            if self.current_grip == self.target_grip:
                 reward = 10.0
                 done = True
                 
@@ -111,8 +129,5 @@ class ProstheticEnvironment(Environment):
     def state(self) -> State:
         """
         Get the current environment state.
-
-        Returns:
-            Current State with episode_id and step_count
         """
         return self._state
