@@ -3,5 +3,21 @@ name: prosthetic_env
 type: space
 runtime: fastapi
 app: server.app:app
-port: 8000
+port: 7860
 
+tasks:
+  - id: 1
+    name: "Precision Grip"
+    description: "Match a specific mid-level force (3-7)."
+  - id: 2
+    name: "Power Grip"
+    description: "Apply maximum force (>= 9)."
+  - id: 3
+    name: "Relaxation"
+    description: "Release all force (<= 1)."
+  - id: 4
+    name: "Delicate Pinch"
+    description: "Match light force exactly (2)."
+  - id: 5
+    name: "Firm Handshake"
+    description: "Match strong, non-max force exactly (8)."

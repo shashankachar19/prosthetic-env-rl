@@ -55,23 +55,18 @@ class ProstheticEnvironment(Environment):
         self.task_type = random.choice([1, 2, 3, 4, 5])
         
         if self.task_type == 1:
-            # Task 1: Precision Grip
             self.current_grip = 0
             self.target_grip = random.randint(3, 7)
         elif self.task_type == 2:
-            # Task 2: Maximum Power Grip
             self.current_grip = 0
             self.target_grip = 10
         elif self.task_type == 3:
-            # Task 3: Relaxation (Start tense, release to 0)
             self.current_grip = 10
             self.target_grip = 0
         elif self.task_type == 4:
-            # Task 4: Delicate Pinch
             self.current_grip = 0
             self.target_grip = 2
         else:
-            # Task 5: Firm Handshake
             self.current_grip = 0
             self.target_grip = 8
         
@@ -79,7 +74,7 @@ class ProstheticEnvironment(Environment):
             current_grip=self.current_grip,
             target_grip=self.target_grip,
             done=False,
-            reward=0.0
+            reward=0.1  # Strictly > 0
         )
 
     def step(self, action: ProstheticAction):
@@ -90,28 +85,28 @@ class ProstheticEnvironment(Environment):
         self.current_grip = max(0, min(10, self.current_grip))
         
         done = False
-        reward = 0.0  # Normalized to fit 0.0-1.0 range
+        reward = 0.1  # Normalized to strictly > 0.0
         
         # Grading logic based on the 5 tasks
         if self.task_type == 1:
             if self.current_grip == self.target_grip:
-                reward = 1.0
+                reward = 0.99  # Maximum reward strictly < 1.0
                 done = True
         elif self.task_type == 2:
             if self.current_grip >= 9: 
-                reward = 1.0
+                reward = 0.99
                 done = True
         elif self.task_type == 3:
             if self.current_grip <= 1: 
-                reward = 1.0
+                reward = 0.99
                 done = True
         elif self.task_type == 4:
             if self.current_grip == self.target_grip:
-                reward = 1.0
+                reward = 0.99
                 done = True
         elif self.task_type == 5:
             if self.current_grip == self.target_grip:
-                reward = 1.0
+                reward = 0.99
                 done = True
                 
         # Stop if we hit the step limit
