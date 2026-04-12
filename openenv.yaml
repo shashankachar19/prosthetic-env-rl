@@ -9,25 +9,20 @@ tasks:
   - id: "1"
     name: "Precision Grip"
     description: "Match a specific mid-level force (3-7)."
-    grader: "prosthetic_env.server.graders:grade_task_1"
-    score_range: [0.1, 0.99]
+    grader: "server.graders:dynamic_grade"
   - id: "2"
     name: "Power Grip"
     description: "Apply maximum force (>= 9)."
-    grader: "prosthetic_env.server.graders:grade_task_2"
-    score_range: [0.1, 0.99]
+    grader: "server.graders:dynamic_grade"
   - id: "3"
     name: "Relaxation"
     description: "Release all force (<= 1)."
-    grader: "prosthetic_env.server.graders:grade_task_3"
-    score_range: [0.1, 0.99]
+    grader: "server.graders:dynamic_grade"
   - id: "4"
     name: "Delicate Pinch"
     description: "Match light force exactly (2)."
-    grader: "prosthetic_env.server.graders:grade_task_4"
-    score_range: [0.1, 0.99]
+    grader: "server.graders:dynamic_grade"
   - id: "5"
     name: "Firm Handshake"
     description: "Match strong, non-max force exactly (8)."
-    grader: "prosthetic_env.server.graders:grade_task_5"
-    score_range: [0.1, 0.99]
+    grader: "server.graders:dynamic_grade"
