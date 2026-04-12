@@ -1,2 +1,5 @@
 openai
-openenv-core
+openenv-core>=0.2.2
+fastapi
+uvicorn[standard]
+requests
