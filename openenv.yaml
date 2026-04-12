@@ -6,23 +6,23 @@ app: server.app:app
 port: 7860
 
 tasks:
-  - id: 1
+  - id: "1"
     name: "Precision Grip"
     description: "Match a specific mid-level force (3-7)."
     grader: "server.graders:grade_task_1"
-  - id: 2
+  - id: "2"
     name: "Power Grip"
     description: "Apply maximum force (>= 9)."
     grader: "server.graders:grade_task_2"
-  - id: 3
+  - id: "3"
     name: "Relaxation"
     description: "Release all force (<= 1)."
     grader: "server.graders:grade_task_3"
-  - id: 4
+  - id: "4"
     name: "Delicate Pinch"
     description: "Match light force exactly (2)."
     grader: "server.graders:grade_task_4"
-  - id: 5
+  - id: "5"
     name: "Firm Handshake"
     description: "Match strong, non-max force exactly (8)."
     grader: "server.graders:grade_task_5"
