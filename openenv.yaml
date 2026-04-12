@@ -6,23 +6,23 @@ app: server.app:app
 port: 7860
 
 tasks:
-  - id: 1
+  - id: "task_1"
     name: "Precision Grip"
     description: "Match a specific mid-level force (3-7)."
-    grader: "server.app:grade_task_1"
-  - id: 2
+    grader: "prosthetic_env.server.graders:grade_task_1"
+  - id: "task_2"
     name: "Power Grip"
     description: "Apply maximum force (>= 9)."
-    grader: "server.app:grade_task_2"
-  - id: 3
+    grader: "prosthetic_env.server.graders:grade_task_2"
+  - id: "task_3"
     name: "Relaxation"
     description: "Release all force (<= 1)."
-    grader: "server.app:grade_task_3"
-  - id: 4
+    grader: "prosthetic_env.server.graders:grade_task_3"
+  - id: "task_4"
     name: "Delicate Pinch"
     description: "Match light force exactly (2)."
-    grader: "server.app:grade_task_4"
-  - id: 5
+    grader: "prosthetic_env.server.graders:grade_task_4"
+  - id: "task_5"
     name: "Firm Handshake"
     description: "Match strong, non-max force exactly (8)."
-    grader: "server.app:grade_task_5"
+    grader: "prosthetic_env.server.graders:grade_task_5"
