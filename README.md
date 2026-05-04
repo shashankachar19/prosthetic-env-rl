@@ -36,8 +36,8 @@ To ensure comprehensive agent training, this environment randomly instantiates o
 This project is fully compliant with Phase 1 and Phase 2 deep validation requirements.
 
 * Framework: Meta openenv-core
-* API / Backend: FastAPI (HTTP & WebSocket endpoints for persistent sessions)
-* LLM Inference: OpenAI Client integration (inference.py)
+* API / Backend: FastAPI (HTTP & WebSocket endpoints for persistent sessions).
+* LLM Inference: OpenAI Client integration (inference.py).
 * Deployment: Containerized via Docker and deployed serverless on Hugging Face Spaces (Port 7860).
 
 ## Repository Structure
